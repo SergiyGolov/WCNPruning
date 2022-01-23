@@ -10,8 +10,8 @@ import java.util.Map;
 public class Main {
 	public static void main(String[] args) {
 		
-		if (args.length < 3) {
-			System.out.println("Missing parameters: edges_file category_articles articles_type");
+		if (args.length < 4) {
+			System.out.println("Missing parameters: edges_file category_articles articles_type purity_threshold");
 			System.exit(0);
 		}
 		
@@ -27,12 +27,13 @@ public class Main {
 		long count = Importer.loadTypes(graph, args[2]);
 		System.out.println("Assigned " + count + " types...");
 
+		double purity_treshold=Double.valueOf(args[3]);
 
 		// Important step to compress the virtual IDs
 		graph.packVirtualIds();
 		
 		
-		GraphPruner gpGini = new GraphPruner(graph, giniScoreFunction, 0.966, 40, giniScoreFunction.getName() + "_articles_scores.json");
+		GraphPruner gpGini = new GraphPruner(graph, giniScoreFunction, purity_treshold, 40, giniScoreFunction.getName() + "_articles_scores.json");
 		gpGini.run();
 	}
 	
